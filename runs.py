@@ -38,22 +38,29 @@ def turn_time(time, turn_rate):
     wait(time)
     chassis.stop()
 
-def drive_time(speed, time):
-    chassis.drive(speed, 0)
+def drive_time(speed, turn_rate, time):
+    chassis.drive(speed, turn_rate)
     wait(time)
     chassis.stop()
 
-# def turn_to(angle, margain_of_error: int = 0.)
+def turn_to(angle, margain_of_error: int = 0.1):
+    # Temporary code! Implement PID regulator
+    turn_angle = angle-hub.imu.heading()
+    chassis.turn(turn_angle)
+    print(turn_angle)
+    print(hub.imu.heading())
 
 # chassis.distance_control()
-# def yellow_run():  # Run 3
-#     chassis.straight(735)
-#     chassis.drive(18, 0)        
-#     turn_time(2300, -300)
-#     chassis.curve(100, 5)
-#     # chassis.stop()
-#     chassis.straight(-1000)
-# yellow_run()
+def yellow_run():  # Run 3
+    hub.imu.reset_heading(0)
+    chassis.straight(770)
+    chassis.drive(18, 0)        
+    turn_time(2300, -300)
+    turn_to(0)
+    chassis.stop()
+    drive_time(-500, -3, 3000)
+    chassis.straight(100)
+yellow_run()
 
 def black_run():
     chassis.straight(-600)
@@ -69,7 +76,7 @@ def black_run():
     drive_time(400, 800)
     wait(2000)
     drive_time(-300, 1000)
-black_run()
+# black_run()
 
 # def run_by_color():
 #     # print(arm_color_sensor.color())
