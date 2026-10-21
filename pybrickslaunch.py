@@ -1,4 +1,4 @@
-HUB_NAME = "Pybricks Hub"
+HUB_NAME = "PandaBoy"
 
 import os
 import subprocess
