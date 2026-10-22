@@ -54,48 +54,10 @@ def reset():
     left_arm_motor.stop()
 
 
-
-
-def run_by_color():
-    reset()
-    acolor = arm_color_sensor.color()
-    ahsv = arm_color_sensor.hsv()
-
-
-    if arm_color_sensor.color(True) == Color.BLUE:
-        hub.display.number(1)
-        hub.light.on(ahsv)
-        run1()
-    elif arm_color_sensor.color(True) == Color.GREEN:
-        hub.display.number(2)
-        hub.light.on(ahsv)
-        run2()
-    elif arm_color_sensor.color(True) == Color.YELLOW:
-        hub.display.number(3)
-        hub.light.on(ahsv)
-        run3()
-    elif arm_color_sensor.color() == Color.RED:
-        hub.display.number(4)
-        hub.light.on(ahsv)
-        run4()
-    elif arm_color_sensor.color() == Color.NONE:
-        hub.display.number(5)
-        hub.light.on(ahsv)
-        black_run()
-    elif arm_color_sensor.color(True) == Color.WHITE:
-        hub.display.number(6)
-        hub.light.on(ahsv)
-        run6()
-
-
-
-
 def turn_time(time, turn_rate):
     chassis.drive(0, turn_rate)
     wait(time)
     chassis.stop()
-
-
 
 
 def drive_time(speed, turn_rate, time):
@@ -104,7 +66,7 @@ def drive_time(speed, turn_rate, time):
     chassis.stop()
 
 
-def turn_to(angle, margain_of_error: int = 1, vel_margain: int = 1):
+def turn_to(angle, margain_of_error: int = 1, vel_margain: int = 1, max_time: int = 3000):
     bias_p = 4
     bias_d = 0.5
     bias_const = 14
@@ -113,7 +75,7 @@ def turn_to(angle, margain_of_error: int = 1, vel_margain: int = 1):
     time = StopWatch()
     last_time = time.time()
     error = last_error
-    while error > margain_of_error or hub.imu.angular_velocity() > 1:
+    while (error > margain_of_error or hub.imu.angular_velocity() > 1) and time.time()<max_time:
         error = ((angle - hub.imu.heading() + 180) % 360) - 180
         current_time = time.time()
         d_error = (last_error-error)/(last_time-current_time)
@@ -127,6 +89,7 @@ def turn_to(angle, margain_of_error: int = 1, vel_margain: int = 1):
         last_error=error
         chassis.drive(0, turn_rate)
 
+
 # chassis.distance_control()
 def yellow_run():  # Run 3
     hub.imu.reset_heading(0)
@@ -137,13 +100,6 @@ def yellow_run():  # Run 3
     chassis.stop()
     drive_time(-500, -3, 3000)
     chassis.straight(100)
-
-
-
-
-# yellow_run()
-
-
 
 
 def black_run():
@@ -162,38 +118,19 @@ def black_run():
     drive_time(-300, 1000)
 
 
-
-
-# black_run()
-
-
-def run_by_color():
-    print(arm_color_sensor.color())
-    print(arm_color_sensor.hsv())
-    hub.imu.reset_heading(0)
-    right_arm_motor.stop()
-    left_arm_motor.stop()
-    acolor = arm_color_sensor.color()
-    ahsv = arm_color_sensor.hsv()
-
-
-
-
-    if arm_color_sensor.color(True) == Color.BLACK:
-        hub.display.number(1)
-        hub.light.on(ahsv)
-        black_run()
-    elif arm_color_sensor.color() == Color.YELLOW:
-        hub.display.number(5)
-        hub.light.on(ahsv)
+def run():
+    menu =  hub_menu("#", "Y", "B", "R")
+    if menu=="#":
+        color = arm_color_sensor.color(True)
+        hsv = arm_color_sensor.hsv(True)
+        hub.light.on(color)
+        print(color)
+        print(hsv)
+    if menu=="Y" or color==Color.YELLOW:
         yellow_run()
+    elif menu=="B" or color==Color.NONE:
+        black_run()
+    elif menu=="R" or color==Color.RED:
+        print("red run")
 
-
-if Button.CENTER in hub.buttons.pressed():
-    print(color_sensor.color())
-
-hub.imu.reset_heading(0)
-gyro_turn(90)
-# turn_to(90)
-wait(1000)
-print(hub.imu.heading())
+run()
