@@ -60,7 +60,7 @@ def turn_time(time, turn_rate):
     chassis.stop()
 
 
-def drive_time(speed, turn_rate, time):
+def drive_time(speed, time, turn_rate: int = 0):
     chassis.drive(speed, turn_rate)
     wait(time)
     chassis.stop()
@@ -75,11 +75,13 @@ def turn_to(angle, margain_of_error: int = 1, vel_margain: int = 1, max_time: in
     time = StopWatch()
     last_time = time.time()
     error = last_error
-    while (error > margain_of_error or hub.imu.angular_velocity() > 1) and time.time()<max_time:
+    while (error > margain_of_error or hub.imu.angular_velocity() > 1 and time.time()<max_time):
         error = ((angle - hub.imu.heading() + 180) % 360) - 180
         current_time = time.time()
-        d_error = (last_error-error)/(last_time-current_time)
-        turn_rate = d_error*bias_d+error*bias_p
+        time_diff = last_time-current_time
+        time_diff=0.01 if time_diff==0 else time_diff
+        d_error = (last_error-error)/time_diff
+        float; turn_rate = d_error*bias_d+error*bias_p
         if turn_rate>0:
             turn_rate+=bias_const
         else:
@@ -89,27 +91,66 @@ def turn_to(angle, margain_of_error: int = 1, vel_margain: int = 1, max_time: in
         last_error=error
         chassis.drive(0, turn_rate)
 
+def drive_pid_time(speed, time, angle: float = hub.imu.heading(), margain_of_error: int = 1, vel_margain: int = 1):
+    bias_p = 4
+    bias_d = 0.5
+    bias_const = 14
+
+    last_error = ((angle - hub.imu.heading() + 180) % 360) - 180
+    time = StopWatch()
+    last_time = time.time()
+    error = last_error
+    while (error > margain_of_error or hub.imu.angular_velocity() > 1 and time.time()>time):
+        error = ((angle - hub.imu.heading() + 180) % 360) - 180
+        current_time = time.time()
+        time_diff = last_time-current_time
+        time_diff=0.0001 if time_diff==0 else time_diff
+        d_error = (last_error-error)/time_diff
+        turn_rate = d_error*bias_d+error*bias_p
+        if turn_rate>0:
+            turn_rate+=bias_const
+        else:
+            turn_rate-=bias_const
+
+        last_time=time
+        last_error=error
+        chassis.drive(speed, turn_rate)
+
+def drive_to_color(speed, color):
+    chassis.drive(speed, 0)
+    while map_color_sensor.color!=color(True):
+            print(map_color_sensor.color(True))
+    chassis.stop()
 
 # chassis.distance_control()
 def yellow_run():  # Run 3
     hub.imu.reset_heading(0)
-    chassis.straight(770)
     chassis.drive(18, 0)
-    turn_time(2300, -300)
+    chassis.straight(770)
+    chassis.stop()
+    drive_time(50, 5, 2000)
     turn_to(0)
     chassis.stop()
-    drive_time(-500, -3, 3000)
+    drive_pid_time(-500, 3500)
     chassis.straight(100)
-
+    chassis.turn(33.33, wait=False)
+    drive_to_color(200, Color.NONE)
+    turn_to(-85)
+    drive_time(200, -3, 1500)
+    chassis.drive(200, 2)
+    left_arm_motor.run_time(500, 3000)
+    chassis.stop()
+    chassis.straight(-75)
+    chassis.turn(-33.33, wait=False)
+    chassis.drive(-1000, 0)
 
 def black_run():
-    chassis.straight(-600)
-    # chassis.curve(-110, 45)
+    chassis.straight(-520)
     chassis.curve(-110, -80)
-    drive_time(-200, 767)
-    chassis.straight(115)
-    chassis.turn(20)
-    chassis.curve(200, -55)
+    drive_time(-300, 767)
+    chassis.straight(125)
+    chassis.turn(80)
+    chassis.curve(67, -90)
     drive_time(300, 676)
     chassis.straight(-130)
     chassis.turn(150)
@@ -118,19 +159,32 @@ def black_run():
     drive_time(-300, 1000)
 
 
+def red_run():
+    chassis.straight(500)
+    right_arm_motor.run_time(-400, 2000)
+    chassis.straight(-75)
+    chassis.turn(49)
+    chassis.straight(400)
+    chassis.turn(-40)
+
 def run():
-    menu =  hub_menu("#", "Y", "B", "R")
+    menu = hub_menu("#", "1", "2", "3", "4", "5", "6")
     if menu=="#":
         color = arm_color_sensor.color(True)
         hsv = arm_color_sensor.hsv(True)
         hub.light.on(color)
         print(color)
         print(hsv)
-    if menu=="Y" or color==Color.YELLOW:
+        if color==Color.YELLOW:
+            yellow_run()
+        elif color==Color.NONE:
+            black_run()
+        elif color==Color.RED:
+            red_run()
+    elif menu == "3":
         yellow_run()
-    elif menu=="B" or color==Color.NONE:
+    elif menu == "4":
         black_run()
-    elif menu=="R" or color==Color.RED:
-        print("red run")
-
+    elif menu == "5":
+        red_run()
 run()
