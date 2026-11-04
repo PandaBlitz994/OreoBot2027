@@ -178,15 +178,19 @@ def black_run():
 
 
 def red_run():
-    chassis.straight(500)
-    right_arm_motor.run_time(-400, 2000)
+    chassis.settings(straight_acceleration=300)
+    chassis.straight(467)
+    right_arm_motor.run_time(-400, 1745)
     chassis.straight(-100)
     chassis.turn(49)
     chassis.straight(400)
     chassis.turn(-40)
-    chassis.straight(100)
+    chassis.straight(150)
     chassis.turn(40)
-    chassis.straight(2000)
+    chassis.straight(350)
+    left_arm_motor.run_angle(400,-105)
+    chassis.arc(450,90)
+    chassis.settings(straight_acceleration=500)
 
 def run():
     menu = hub_menu("#", "1", "2", "3", "4", "5", "6")
