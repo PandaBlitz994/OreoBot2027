@@ -139,42 +139,57 @@ def yellow_run():  # Run 3
   #  chassis.drive(200, 2)
   #  left_arm_motor.run_time(500, 3000)
    # chassis.stop()
-    wait(4000)
+    #wait(4000)
     chassis.settings(380)
-    chassis.straight(-1050)
+    drive_time(-500, 1200)
     chassis.straight(200)
-    #chassis.turn(-33.33, wait=False)
+    chassis.turn(-20, wait=False)
     #chassis.drive(-1000, 0)
+    chassis.straight(200)
+    drive_to_color(Color.BLACK)
+    chassis.straight(-250)
+   # chassis.drive(350, 2800)
+    chassis.arc(-500, 90)
+    
+
 
 def black_run():
      chassis.use_gyro(True)
      #left_arm_motor.run_time(-6000, 1500)
      chassis.settings(straight_acceleration=210)
      #left_arm_motor.run_time(350, 750, wait=False)
-     chassis.straight(-560)
-     left_arm_motor.run_time(-6000, 1500)
+     chassis.straight(-580)
+     left_arm_motor.run_time(6000, 1500)
      #left_arm_motor.run_time(-275, 1500, wait=False)
-     chassis.curve(-110, -80)
+     chassis.arc(-110, -80)
      chassis.straight(-200)
-     left_arm_motor.run_time(1000, 1500) #עד פה עובד
+     left_arm_motor.run_time(-1250, 1500) #עד פה עובד
      chassis.straight(225)
      chassis.turn(-40, absolute=True)
      chassis.straight(75)
      print(hub.imu.heading())
      chassis.turn(200, absolute=True)
      print(hub.imu.heading())
-     chassis.straight(350)
-     chassis.settings(200)
-     chassis.straight(-100)
-     chassis.straight(200)
-     chassis.straight(-300)
-     chassis.arc(600, -80)
-    # drive_time(300, 400)
-    # chassis.straight(-130)
-    # chassis.turn(150)
-    # drive_time(400, 800)
-    # wait(2000)
-    # drive_time(-300, 1000)
+     drive_time(200, 2000)
+     right_arm_motor.run_time(1000, 8000)
+     chassis.straight(-50)
+     drive_time(200, 500)
+     chassis.arc(80, -10, then=Stop.NONE)
+     chassis.arc(-80, -10)
+
+    # #  chassis.straight(350)
+    # #  chassis.settings(200)
+    # #  chassis.straight(-100)
+    # #  chassis.straight(200)
+    #  chassis.straight(-200)
+    #  chassis.arc(600, -80)
+    # # drive_time(300, 400)
+    # # chassis.straight(-130)
+    # # chassis.turn(150)
+    # # drive_time(400, 800)
+    # # wait(2000)
+    # # drive_time(-300, 1000)
+
 
 
 def red_run():
@@ -192,6 +207,15 @@ def red_run():
     chassis.arc(450,90)
     chassis.settings(straight_acceleration=500)
 
+
+def blue_run():
+    right_arm_motor.run_angle(500, 360)
+    drive_time(300, 4000)
+    chassis.straight(-55)
+    right_arm_motor.run_angle(500, -300)
+    chassis.straight(70)
+    right_arm_motor.run_time(-5000, 5000)
+
 def run():
     menu = hub_menu("#", "1", "2", "3", "4", "5", "6")
     if menu=="#":
@@ -206,6 +230,10 @@ def run():
             black_run()
         elif color==Color.RED:
             red_run()
+        elif color==Color.BLUE:
+            blue_run()
+    elif menu=="1":
+        blue_run()
     elif menu == "3":
         yellow_run()
     elif menu == "4":
