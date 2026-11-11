@@ -125,9 +125,17 @@ def drive_to_color(speed, color):
 # chassis.distance_control()
 def yellow_run():  # Run 3
     chassis.settings(350)
-    drive_time(300, 2350)
-    drive_time(-425, 2500)
-    chassis.straight(-20)
+    drive_time(200, 3100)
+    chassis.settings(150)
+    chassis.drive(0,-50)
+    wait(1500)
+    chassis.drive(100, 1000)
+    chassis.drive(0,50)
+    wait(1000)
+    chassis.settings(350)
+    drive_time(-425, 2750)
+    chassis.straight(750)
+    
 
 def black_run():
     chassis.use_gyro(True)
@@ -140,18 +148,16 @@ def black_run():
     left_arm_motor.run_time(-1250, 1500)
     chassis.straight(215)
     chassis.turn(-40, absolute=True)
-    chassis.straight(75)
+    chassis.straight(55)
     print(hub.imu.heading())
-    chassis.turn(-200, absolute=True)
+    chassis.turn(-160, absolute=True)
     print(hub.imu.heading())
     drive_time(200, 2000)
     right_arm_motor.run_time(1000, 8000)
-    chassis.straight(-50)
-    drive_time(200, 500)
-    chassis.arc(80, -10, then=Stop.NONE)
-    chassis.arc(-80, -10)
-    chassis.settings(straight_acceleration=600)
-    chassis.straight(-1000)
+    left_arm_motor.run_time(1670, 1500)
+    chassis.straight(-100)
+    chassis.arc(-400, 50)
+    chassis.drive(-700)
 
 def red_run():
     chassis.settings(straight_acceleration=300)
@@ -167,7 +173,6 @@ def red_run():
     left_arm_motor.run_angle(400,-105)
     chassis.arc(450,90)
     chassis.settings(straight_acceleration=500)
-
 
 def blue_run():
     right_arm_motor.run_angle(500, 360)
