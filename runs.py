@@ -139,20 +139,33 @@ def drive_to_color(speed, color):
     chassis.stop()
 
 
+def drive_to_black(speed):
+    chassis.drive(speed, 0)
+    while map_color_sensor.reflection() > 12:
+        print(map_color_sensor.hsv(True))
+    chassis.stop()
+
+
 # chassis.distance_control()
 def yellow_run():  # Run 3
-    chassis.settings(350)
-    drive_time(200, 3650)
-    chassis.settings(150)
-    chassis.drive(0, -20)
-    wait(1500)
-    drive_time(200, 1000)
-    chassis.drive(-200, 1000)
-    chassis.drive(0, 45)
-    wait(1000)
-    chassis.settings(350)
-    drive_time(-425, 2250)
-    chassis.straight(450)
+    chassis.settings(250)
+    chassis.straight(600)
+    chassis.turn(-9)
+    chassis.straight(-1000)
+    # drive_time(200, 2750)
+    # drive_time(200, 4250)
+    chassis.straight(300)
+    # chassis.settings(200)
+    # chassis.drive(0, -45)
+    # wait(1250)
+    # drive_time(100, 500)
+    # drive_time(-200, 250)
+    # chassis.turn(-90, absolute=True)
+    # # chassis.drive(0, -20)
+    # wait(1000)
+    # chassis.settings(350)
+    # drive_time(-425, 3000)
+    # chassis.straight(450)
 
 
 def black_run():
@@ -172,8 +185,7 @@ def black_run():
     print(hub.imu.heading())
     drive_time(200, 2000)
     left_arm_motor.run_time(1670, 1500, wait=False)
-    right_arm_motor.run_time(850, 10000)
-    # chassis.settings(straight_acceleration=None)
+    right_arm_motor.run_time(-850, 10000)
     left_arm_motor.run_time(-2100, 1000, wait=False)
     chassis.straight(-100)
     chassis.arc(700, -90)
@@ -181,18 +193,24 @@ def black_run():
 
 def red_run():
     chassis.settings(straight_acceleration=300)
-    chassis.straight(467)
+    chassis.straight(480)
     right_arm_motor.run_time(-400, 1745)
     chassis.straight(-100)
-    chassis.turn(49)
-    chassis.straight(400)
-    chassis.turn(-40)
-    chassis.straight(150)
-    chassis.turn(40)
-    chassis.straight(350)
-    left_arm_motor.run_angle(400, -105)
-    chassis.arc(450, 90)
-    chassis.settings(straight_acceleration=500)
+    chassis.turn(45)
+    # chassis.straight(400)
+    # chassis.turn(-40)
+    # chassis.straight(140)
+    # chassis.turn(35)
+    # chassis.straight(80)
+    # left_arm_motor.run_angle(400, -130)
+    # chassis.settings(straight_acceleration=50)
+    # chassis.straight(20)
+    # left_arm_motor.run_angle(100, 150)
+    # chassis.settings(straight_acceleration=300)
+    # chassis.straight(245)
+    # left_arm_motor.run_angle(400, -120)
+    # chassis.settings(straight_acceleration=500)
+    # chassis.arc(450, 75)
 
 
 def blue_run():
