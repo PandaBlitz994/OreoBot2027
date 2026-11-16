@@ -192,25 +192,21 @@ def black_run():
 
 
 def red_run():
+    hub.imu.reset_heading(0)
     chassis.settings(straight_acceleration=300)
-    chassis.straight(480)
-    right_arm_motor.run_time(-400, 1745)
+    chassis.straight(500)
+    right_arm_motor.run_time(-550, 1500)
+    right_arm_motor.run_time(-500, 100, wait=False)
     chassis.straight(-100)
-    chassis.turn(45)
-    # chassis.straight(400)
-    # chassis.turn(-40)
-    # chassis.straight(140)
-    # chassis.turn(35)
-    # chassis.straight(80)
-    # left_arm_motor.run_angle(400, -130)
-    # chassis.settings(straight_acceleration=50)
-    # chassis.straight(20)
-    # left_arm_motor.run_angle(100, 150)
-    # chassis.settings(straight_acceleration=300)
-    # chassis.straight(245)
-    # left_arm_motor.run_angle(400, -120)
-    # chassis.settings(straight_acceleration=500)
-    # chassis.arc(450, 75)
+    chassis.straight(30)
+    chassis.turn(45, absolute=True)
+    chassis.straight(150)
+    drive_to_black(300)
+    left_arm_motor.run_angle(400, 45)
+    left_arm_motor.run_angle(400, -45)
+    chassis.straight(100)
+    left_arm_motor.run_angle(300, -130)
+    left_arm_motor.run_angle(150, 130)
 
 
 def blue_run():
