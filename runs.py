@@ -195,7 +195,7 @@ def red_run():
     hub.imu.reset_heading(0)
     chassis.settings(straight_acceleration=300)
     chassis.straight(500)
-    right_arm_motor.run_time(-550, 1500)
+    right_arm_motor.run_time(-550, 1510)
     right_arm_motor.run_time(-500, 100, wait=False)
     chassis.straight(-100)
     chassis.straight(30)
@@ -205,18 +205,35 @@ def red_run():
     left_arm_motor.run_angle(400, 45)
     left_arm_motor.run_angle(400, -45)
     chassis.straight(100)
-    left_arm_motor.run_angle(300, -130)
-    left_arm_motor.run_angle(150, 130)
+    left_arm_motor.run_angle(300, -200)
+    left_arm_motor.run_angle(140, 200, wait=False)
+    chassis.straight(20)
+    chassis.straight(180)
+    hub.imu.reset_heading(0)
+    chassis.settings(straight_acceleration=300)
+    chassis.straight(140)
+    left_arm_motor.run_angle(300, -200)
+    left_arm_motor.run_angle(140, 200)
+
+
+def alt_yellow_run():
+    while True:
+        left_arm_motor.run_time(1000, 3000)
+        left_arm_motor.run_time(-1000, 3000)
 
 
 def blue_run():
-    right_arm_motor.run_angle(500, 360)
-    drive_time(300, 4000)
-    chassis.straight(-55)
-    right_arm_motor.run_angle(500, -300)
-    chassis.straight(70)
-    right_arm_motor.run_time(-5000, 5000)
-
+    chassis.settings(straight_acceleration=275)
+    left_arm_motor.run_angle(300, -267)
+    drive_time(-275, 3750)
+    # right_arm_motor.run_angle(500, 360)
+    # drive_time(300, 4000)
+    # chassis.straight(-55)
+    # right_arm_motor.run_angle(500, -300)
+    # chassis.straight(70)
+    # right_arm_motor.run_time(-5000, 5000)
+    left_arm_motor.run_angle(300, 500)
+    left_arm_motor.run_angle(10000, -3000)
 
 def run():
     menu = hub_menu("#", "1", "2", "3", "4", "5", "6")
@@ -242,7 +259,7 @@ def run():
     elif menu == "1":
         blue_run()
     elif menu == "3":
-        yellow_run()
+        alt_yellow_run()
     elif menu == "4":
         black_run()
     elif menu == "5":
