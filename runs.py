@@ -146,6 +146,19 @@ def drive_to_black(speed):
     chassis.stop()
 
 
+def drive_to_blue(speed):
+    chassis.drive(speed, 0)
+    onBlue = False
+    while not onBlue:
+        print(map_color_sensor.hsv(True))
+        if (
+            190 < map_color_sensor.hsv(True).h < 210
+            and 55 < map_color_sensor.hsv(True).s < 70
+            and 70 < map_color_sensor.hsv(True).v < 90
+        ):
+            onBlue = True
+
+
 # chassis.distance_control()
 def yellow_run():  # Run 3
     chassis.settings(250)
@@ -218,25 +231,32 @@ def red_run():
 
 def alt_yellow_run():
     chassis.settings(straight_speed=320, turn_rate=10)
-    chassis.straight(900, then=Stop.COAST)
-    chassis.straight(-30)
-    # chassis.turn(35, wait=False)
-    # chassis.arc(-50, 45, wait=False)
-    left_arm_motor.run_time(-1000, 4500)
-    chassis.turn(-30)
-    chassis.straight(50)
-    chassis.settings(300, 300, 500, 300)
-    chassis.turn(-45)
-    chassis.straight(85)
-    chassis.turn(15)
-    drive_time(-300, 4000)
-    # chassis.arc(50, -45, wait=False)
-    # drive_time(200, 500)
-    # chassis.settings(300, 300, 300)
-    # chassis.turn(-50)
+    drive_to_blue(500)
+    chassis.straight(250)
+    drive_to_blue(100)
+    # drive_to_blue(300)
+    chassis.stop()
+    left_arm_motor.run_time(-1000, 2000, wait=False)
+    turn_time(1000, -35)
+    # chassis.straight(900, then=Stop.COAST)
+    # chassis.straight(-30)
+    # # chassis.turn(35, wait=False)
+    # # chassis.arc(-50, 45, wait=False)
+    # left_arm_motor.run_time(-1000, 4500)
+    # chassis.turn(-30)
     # chassis.straight(50)
-    # chassis.turn(50)
+    # chassis.settings(300, 300, 500, 300)
+    # chassis.turn(-45)
+    # chassis.straight(85)
+    # chassis.turn(15)
     # drive_time(-300, 4000)
+    # # chassis.arc(50, -45, wait=False)
+    # # drive_time(200, 500)
+    # # chassis.settings(300, 300, 300)
+    # # chassis.turn(-50)
+    # # chassis.straight(50)
+    # # chassis.turn(50)
+    # # drive_time(-300, 4000)
 
 
 def blue_run():
