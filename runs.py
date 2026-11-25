@@ -209,24 +209,44 @@ def black_run():
     chassis.arc(700, -90)
 
 
-def red_run():
-    hub.imu.reset_heading(0)
-    chassis.settings(straight_acceleration=300)
-    chassis.straight(500)
-    right_arm_motor.run_time(-550, 1510)
-    right_arm_motor.run_time(-500, 100, wait=False)
-    chassis.straight(-100)
-    chassis.straight(30)
-    chassis.turn(45, absolute=True)
-    chassis.straight(150)
-    drive_to_black(300)
-    chassis.straight(100)
-    left_arm_motor.run_angle(300, -200)
-    left_arm_motor.run_angle(140, 200, wait=False)
+def green_run():
+    chassis.arc(450, 80)
+    chassis.straight(80)
+    chassis.turn(0, absolute=True)
+    chassis.settings(150)
     chassis.straight(300)
-    left_arm_motor.run_angle(300, -450)
-    left_arm_motor.run_angle(140, 200)
-    chassis.arc(650, 80)
+    right_arm_motor.run_time(300, 2000)
+    chassis.straight(-200)
+    chassis.arc(300, -25)
+
+
+def red_run():
+    menu = hub_menu("S", ">", "X")
+    while hub!="X":
+        if menu=="S":
+            hub.imu.reset_heading(0)
+            chassis.settings(straight_acceleration=300)
+            chassis.straight(600)
+            drive_time(-1000, 2000)
+            chassis.straight(50)
+        elif menu==">":
+            chassis.straight(500)
+            right_arm_motor.run_time(-550, 1510)
+            right_arm_motor.run_time(-500, 100, wait=False)
+            chassis.straight(-100)
+            chassis.straight(30)
+            chassis.turn(45, absolute=True)
+            chassis.straight(150)
+            drive_to_black(300)
+            chassis.straight(100)
+            left_arm_motor.run_angle(300, -200)
+            left_arm_motor.run_angle(140, 200, wait=False)
+            chassis.straight(300)
+            left_arm_motor.run_angle(300, -450)
+            left_arm_motor.run_angle(140, 200)
+            chassis.arc(650, 80)
+            exit()
+    menu = hub_menu("S", ">", "X")
 
 
 def alt_yellow_run():
@@ -264,24 +284,12 @@ def alt_yellow_run():
 
 
 def blue_run():
-    chassis.settings(straight_acceleration=275)
-    right_arm_motor.run_angle(1000, -267, wait=False)
-    drive_time(1000, 3750)
-    chassis.settings(straight_speed=150)
-    chassis.straight(-2)
-    right_arm_motor.run_angle(300, 500)
-    right_arm_motor.run_angle(1000, -1000)
-    # right_arm_motor.run_angle(500, 360)
-    # drive_time(300, 4000)
-    # chassis.straight(-55)
-    # right_arm_motor.run_angle(500, -300)
-    # chassis.straight(70)
-    # right_arm_motor.run_time(-5000, 5000)
-    left_arm_motor.run_angle(300, 500)
-    left_arm_motor.run_angle(10000, -3000)
-    drive_time(650, 2250)
-    right_arm_motor.run_time(700, 1200)
-    right_arm_motor.run_time(-850, 1500)
+    right_arm_motor.run_angle(500, 360)
+    drive_time(300, 4000)
+    chassis.straight(-55)
+    right_arm_motor.run_angle(500, -300)
+    chassis.straight(70)
+    right_arm_motor.run_time(-5000, 5000)
 
 
 def run():
