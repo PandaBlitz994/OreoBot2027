@@ -284,24 +284,56 @@ def alt_yellow_run():
 
 
 def blue_run():
+    leaf_relative_positions = [-10, -42, -60]
+    log = []
+    def smart_snatch(direction, check):
+        isTrapped=False
+        left_arm_motor.run(150*direction)
+        time = StopWatch()
+        time.reset(); time.resume()
+        while not isTrapped:
+            current_load=left_arm_motor.load()
+            print(current_load)
+            if time.time() > 600:
+                isTrapped=True
+                log.append("Empty | Halted due to time")
+                left_arm_motor.brake()
+                return False
+            if abs(current_load)>40 and check:
+                isTrapped=True
+                log.append("Trapped | Halted due to load")
+                left_arm_motor.brake()
+                return True
     # right_arm_motor.run_angle(500, 360)
     # drive_time(300, 4000)
     # chassis.straight(-55)
     # right_arm_motor.run_angle(500, -300)
     # chassis.straight(70)
     # right_arm_motor.run_time(-5000, 5000)
-    
-    isTrapped=False
-    left_arm_motor.run(100)
-    time = StopWatch()
-    time.reset(); time.resume()
-    while not isTrapped:
-        current_load=left_arm_motor.load()
-        print("Load: ", current_load, "mNm | time: ", time.time(), "ms")
-        if time.time() > 1000 or abs(current_load)>55:
-            isTrapped=True
-    left_arm_motor.brake()
-    print("Halted!")
+    left_arm_motor.reset_angle(0)
+    left_arm_motor.run_target(300, leaf_relative_positions[0])
+    trapped = smart_snatch(1, True)
+    if trapped:
+        chassis.straight(-150, wait=False)
+        left_arm_motor.run_target(-300, leaf_relative_positions[1])
+        drive_time(300, 1000)
+        smart_snatch(-1, False)
+        # chassis.straight(-150, wait=False)
+        # left_arm_motor.run_target(-300, leaf_relative_positions[1])
+        # drive_time(300, 1000)
+        # smart_snatch(-1)
+    else:
+        chassis.straight(-150)
+        left_arm_motor.run_target(-300, leaf_relative_positions[1])
+        drive_time(300, 1000)
+        trapped = smart_snatch(1, True)
+        if trapped:
+            chassis.straight(-150, wait=False)
+            left_arm_motor.run_target(300, leaf_relative_positions[2])
+            drive_time(300, 1000)
+            smart_snatch(-1, False)
+    drive_time(-1000, 2000)
+    print(log)
 
 
 
