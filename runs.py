@@ -284,12 +284,25 @@ def alt_yellow_run():
 
 
 def blue_run():
-    right_arm_motor.run_angle(500, 360)
-    drive_time(300, 4000)
-    chassis.straight(-55)
-    right_arm_motor.run_angle(500, -300)
-    chassis.straight(70)
-    right_arm_motor.run_time(-5000, 5000)
+    # right_arm_motor.run_angle(500, 360)
+    # drive_time(300, 4000)
+    # chassis.straight(-55)
+    # right_arm_motor.run_angle(500, -300)
+    # chassis.straight(70)
+    # right_arm_motor.run_time(-5000, 5000)
+    
+    isTrapped=False
+    left_arm_motor.run(100)
+    time = StopWatch()
+    time.reset(); time.resume()
+    while not isTrapped:
+        current_load=left_arm_motor.load()
+        print("Load: ", current_load, "mNm | time: ", time.time(), "ms")
+        if time.time() > 1000 or abs(current_load)>55:
+            isTrapped=True
+    left_arm_motor.brake()
+    print("Halted!")
+
 
 
 def run():
